@@ -1,47 +1,44 @@
-export default function Page() {
-  return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
-  )
+'use client'
+
+import { useState } from 'react'
+import { ArrowRight, Check, ChevronDown, ChevronRight, Circle, Factory, Gauge, Globe2, Menu, Network, Play, ScanLine, Sparkles, X, Zap } from 'lucide-react'
+
+const lime = '#c8f74a'
+const cyan = '#5de6e0'
+
+function Tag({ children, tone = 'lime' }: { children: React.ReactNode; tone?: 'lime' | 'cyan' | 'muted' }) {
+  return <span className={`tag tag-${tone}`}><span className="tag-dot" />{children}</span>
 }
+function SectionIntro({ eyebrow, title, body }: { eyebrow: string; title: string; body?: string }) {
+  return <div className="section-intro"><Tag>{eyebrow}</Tag><h2>{title}</h2>{body && <p>{body}</p>}</div>
+}
+function Button({ children, outline = false, onClick }: { children: React.ReactNode; outline?: boolean; onClick?: () => void }) {
+  return <button onClick={onClick} className={outline ? 'btn btn-outline' : 'btn'}>{children}<ArrowRight size={15} /></button>
+}
+function MiniChart({ color = lime }: { color?: string }) {
+  return <div className="mini-chart" aria-label="rising trend chart"><svg viewBox="0 0 240 72" preserveAspectRatio="none"><path d="M0 62 L28 58 L50 61 L72 42 L96 48 L119 28 L142 36 L166 19 L188 23 L215 8 L240 13" fill="none" stroke={color} strokeWidth="2"/><path d="M0 62 L28 58 L50 61 L72 42 L96 48 L119 28 L142 36 L166 19 L188 23 L215 8 L240 13 V72 H0Z" fill={color} opacity=".08"/></svg></div>
+}
+function FacilityDiagram() {
+  const nodes = [{ n: '01', label: 'AG INPUT', icon: '◒' }, { n: '02', label: 'BIO-REFINERY', icon: '⌬' }, { n: '03', label: 'MATERIALS', icon: '◈' }]
+  return <div className="facility"><div className="facility-top"><Tag tone="cyan">LIVE FACILITY OVERVIEW</Tag><span className="pulse">● ONLINE</span></div><div className="facility-visual"><div className="orbit orbit-a" /><div className="orbit orbit-b" /><div className="core"><Factory size={30}/><small>BG / 01</small></div>{nodes.map((node, i) => <div className={`facility-node n${i}`} key={node.n}><span className="node-num">{node.n}</span><strong>{node.icon} {node.label}</strong><small>{i === 0 ? '4.2 t / hr' : i === 1 ? '86% yield' : 'READY TO SHIP'}</small></div>)}<div className="flow-line line-a"/><div className="flow-line line-b"/></div><div className="facility-bottom"><span>THROUGHPUT <b>4.2 T/H</b></span><span>CARBON INTENSITY <b className="cyan">−72%</b></span><span>UPTIME <b>99.2%</b></span></div></div>
+}
+function App() {
+  const [menu, setMenu] = useState(false); const [region, setRegion] = useState('ALL'); const [optimizing, setOptimizing] = useState(false)
+  const optimize = () => { setOptimizing(true); window.setTimeout(() => setOptimizing(false), 1200) }
+  return <main>
+    <header className="nav"><a className="brand" href="#top"><span className="brand-mark">+</span>BIO<span>GRID</span></a><nav className={menu ? 'nav-links open' : 'nav-links'}>{['Platform','Technology','Impact','About'].map(x => <a href={`#${x.toLowerCase()}`} key={x} onClick={() => setMenu(false)}>{x}</a>)}<Button outline>Request access</Button></nav><button className="menu-button" onClick={() => setMenu(!menu)} aria-label="Toggle menu">{menu ? <X/> : <Menu/>}</button></header>
+    <section className="hero wrap" id="top"><div className="hero-copy"><Tag>THE MATERIALS INTELLIGENCE LAYER</Tag><h1>Waste is a<br/><em>resource.</em></h1><p className="hero-lede">BIOGRID turns agricultural byproducts into engineered biomaterials — connecting biological processes, industrial systems, and climate-positive outcomes.</p><div className="hero-actions"><Button onClick={() => document.getElementById('platform')?.scrollIntoView({ behavior: 'smooth' })}>Explore the platform</Button><button className="text-link"><Play size={14}/> See how it works</button></div><div className="hero-note"><span className="pulse">●</span> SYSTEMS ONLINE <i/> BUILD 0.9.24</div></div><FacilityDiagram/></section>
+    <div className="signal-bar"><div className="wrap signal-inner"><span>PROCESSING THE PLANET'S MOST ABUNDANT FEEDSTOCKS</span><div className="ticker"><span>RICE HUSK</span><span>WHEAT STRAW</span><span>SUGARCANE BAGASSE</span><span>COCONUT FIBER</span></div></div></div>
+    <section className="problem wrap"><SectionIntro eyebrow="THE INPUT" title="The raw material is already here." body="Every harvest creates an overlooked stream of value. BIOGRID gives it a new destination."/><div className="problem-flow"><div className="waste-visual"><div className="grain-lines"/><strong>1.2B</strong><span>TONNES OF AG WASTE<br/>GENERATED ANNUALLY</span></div><div className="flow-arrow"><ArrowRight/></div><div className="output-visual"><div className="material-stack"><i/><i/><i/></div><strong>+72%</strong><span>LOWER EMBODIED<br/>CARBON VS. VIRGIN INPUTS</span></div></div></section>
+    <section className="architecture wrap" id="platform"><SectionIntro eyebrow="THE PLATFORM" title="One grid. Infinite materials."/><div className="arch-grid"><div className="arch-copy"><p className="large-copy">We combine <span>biological intelligence</span> with industrial-scale precision to create materials that perform better — and cost less to make.</p><div className="arch-list"><div><span>01</span><b>Sense</b><p>Map feedstock quality in real-time.</p></div><div><span>02</span><b>Model</b><p>Simulate the optimal process path.</p></div><div><span>03</span><b>Make</b><p>Run the recipe. Scale the output.</p></div></div></div><div className="network"><div className="network-label">BIOGRID OS / NETWORK VIEW</div><span className="net-node net-center">BG</span>{['FEEDSTOCK','ENZYME','PROCESS','MARKET','CARBON'].map((x,i)=><div className={`net-node net-${i}`} key={x}>{x}</div>)}<div className="net-lines"/></div></div></section>
+    <section className="features wrap" id="technology"><SectionIntro eyebrow="CORE CAPABILITIES" title="The operating system for matter."/><div className="feature-grid"><article className="feature-card feature-wide"><div><Tag tone="cyan">01 / FEEDSTOCK INTELLIGENCE</Tag><h3>Know what<br/>you&apos;re working with.</h3><p>Real-time composition data turns variable agricultural waste into a predictable input.</p></div><div className="scan-visual"><ScanLine size={28}/><div className="scan-bar"/><small>SCANNING / RICE HUSK_04</small></div></article><article className="feature-card"><Tag>02 / PROCESS OPTIMIZATION</Tag><h3>More output.<br/>Less energy.</h3><MiniChart/><p>Adaptive recipes reduce process energy by <b>34%</b>.</p></article><article className="feature-card feature-cyan"><Tag tone="cyan">03 / MATERIAL DESIGN</Tag><h3>Performance<br/>by design.</h3><div className="material-glyph">◈</div><p>Engineer properties at the molecular level.</p></article><article className="feature-card feature-dark"><Tag tone="muted">04 / IMPACT LEDGER</Tag><h3>Measure what<br/>matters.</h3><div className="ledger"><span>CO₂ AVOIDED</span><strong>18,420</strong><small>TONNES / YTD</small></div></article></div></section>
+    <section className="twin wrap"><div className="twin-heading"><SectionIntro eyebrow="DIGITAL TWIN / FACILITY 01" title="See the invisible." body="A living model of your operation, from feedstock to finished material."/><Tag tone="cyan">SIMULATION LIVE</Tag></div><div className="twin-panel"><div className="twin-top"><span>FACILITY_01 / CURRENT STATE</span><span>LAST SYNC 04:32:18</span></div><div className="twin-content"><div className="twin-model"><div className="model-cylinder"/><div className="model-grid"/><span className="model-label ml1">BIO-REACTOR A</span><span className="model-label ml2">DRYING / 72°C</span><span className="model-label ml3">OUTPUT / 86%</span></div><div className="twin-stats"><div><small>THROUGHPUT</small><strong>4.2 <i>t / hr</i></strong><MiniChart color={cyan}/></div><div><small>ENERGY LOAD</small><strong>−34 <i>%</i></strong><div className="bar-track"><i style={{width:'66%'}}/></div></div><div><small>CARBON INTENSITY</small><strong>0.42 <i>kg CO₂e</i></strong><div className="bar-track"><i style={{width:'28%',background:lime}}/></div></div></div></div><div className="mix"><div><small>CURRENT MIX</small><b>Rice husk <span>60%</span></b><b>Bagasse <span>25%</span></b><b>Fiber <span>15%</span></b></div><ChevronRight/><div className="optimized"><small>OPTIMIZED MIX</small><b>Rice husk <span>42%</span></b><b>Bagasse <span>38%</span></b><b>Fiber <span>20%</span></b></div></div></div></section>
+    <section className="optimization wrap"><div className="optimization-copy"><Tag>AI OPTIMIZATION ENGINE</Tag><h2>Ask a better<br/><em>question.</em></h2><p>What if your next batch could be your best one? BIOGRID runs millions of simulations to find the answer.</p><Button onClick={optimize}>{optimizing ? 'Calculating...' : 'Run optimization'}</Button></div><div className="calc-panel"><div className="calc-top"><span>OPTIMIZATION REQUEST</span><span className="pulse">● READY</span></div><div className="calc-row"><span>INPUT</span><b>Mixed agricultural residue</b></div><div className="calc-row"><span>OBJECTIVE</span><b>Maximize tensile strength</b></div><div className="calc-row"><span>CONSTRAINT</span><b>−20% energy consumption</b></div><div className="calc-result"><small>RECOMMENDED RECIPE / v.24</small><strong>{optimizing ? '•••' : '+18.4%'} <i>performance uplift</i></strong><div className="result-line"><Check size={15}/> 12% less binder <Check size={15}/> 8°C lower cure</div></div></div></section>
+    <section className="potential wrap" id="impact"><SectionIntro eyebrow="INDIA / FEEDSTOCK POTENTIAL" title="A continent of possibility." body="India produces over 500 million tonnes of agricultural residue every year. The opportunity is distributed — the intelligence shouldn&apos;t be."/><div className="map-layout"><div className="map-box"><div className="fake-map"><div className="india-shape">INDIA</div>{['PUNJAB','UP','MAHARASHTRA','KARNATAKA','TAMIL NADU'].map((x,i)=><button className={`map-pin pin-${i}`} key={x} title={x}><span/>{x}</button>)}</div><div className="map-filters">{['ALL','RICE','SUGARCANE','COTTON'].map(x=><button className={region===x?'active':''} onClick={()=>setRegion(x)} key={x}>{x}</button>)}</div></div><div className="potential-metrics"><div><span>AVAILABLE FEEDSTOCK</span><strong>184M <i>t / yr</i></strong></div><div><span>CONVERSION POTENTIAL</span><strong>₹42B <i>market</i></strong></div><div><span>CO₂ REMOVAL POTENTIAL</span><strong>68M <i>t / yr</i></strong></div><p>Showing: <b>{region}</b> feedstock regions <ChevronDown size={14}/></p></div></div></section>
+    <section className="metrics wrap"><Tag tone="cyan">DEMO / IMPACT SNAPSHOT</Tag><div className="metrics-grid"><div><strong>−72%</strong><span>EMBODIED CARBON</span></div><div><strong>+18%</strong><span>MATERIAL PERFORMANCE</span></div><div><strong>3.4×</strong><span>VALUE PER TONNE</span></div><div><strong>24/7</strong><span>PROCESS VISIBILITY</span></div></div></section>
+    <section className="compare wrap"><SectionIntro eyebrow="WHY BIOGRID" title="The old way was built for scarcity."/><div className="compare-table"><div className="compare-head"><span>TRADITIONAL SUPPLY CHAIN</span><b>BIOGRID NETWORK</b></div>{[['Linear, opaque inputs','Networked, visible feedstocks'],['Fixed recipes','Adaptive intelligence'],['Waste as a cost','Waste as a resource'],['Impact as a report','Impact as an output']].map(r=><div className="compare-row" key={r[0]}><span><X size={15}/>{r[0]}</span><b><Check size={15}/>{r[1]}</b></div>)}</div></section>
+    <section className="cta wrap"><div><Tag>BUILD THE NEXT MATERIAL</Tag><h2>Let&apos;s make<br/><em>more</em> from less.</h2><p>Bring us your waste stream. We&apos;ll bring the intelligence.</p><Button>Start a conversation</Button></div><div className="cta-mark"><Globe2 size={130}/><span>BG / WORLD<br/>IN MOTION</span></div></section>
+    <footer className="footer wrap"><a className="brand" href="#top"><span className="brand-mark">+</span>BIO<span>GRID</span></a><span>© 2024 BIOGRID SYSTEMS / PROTOTYPE</span><div><a href="#platform">Platform</a><a href="#technology">Technology</a><a href="#impact">Impact</a><a href="#top">Back to top ↑</a></div></footer>
+  </main>
+}
+export default App
