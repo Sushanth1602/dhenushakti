@@ -1,2 +1,2 @@
-import { App } from '@/components/dhenu-app'
-export default App
+import { GovernmentExplorer } from '@/components/government-explorer'
+export default function MapPage(){ return <GovernmentExplorer /> }
