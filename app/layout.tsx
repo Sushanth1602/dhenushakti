@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'BIOGRID — The Materials Intelligence Layer',
-  description: 'BIOGRID turns agricultural byproducts into engineered biomaterials through biological intelligence and industrial-scale precision.',
-  generator: 'BIOGRID',
+  title: 'DhenuShakti — The Materials Intelligence Layer',
+  description: 'DhenuShakti turns agricultural byproducts into engineered biomaterials through biological intelligence and industrial-scale precision.',
+  generator: 'DhenuShakti',
   icons: {
     icon: [
       {
